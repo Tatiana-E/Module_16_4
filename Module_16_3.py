@@ -19,7 +19,9 @@ async def get_users() -> list:
 
 
 @app.post('/user/{username}/{age}')
-async def create_user(user: User):
+async def create_user(user_id: Annotated[int, Path(gt=0, le=100, description= "User ID from 1 to 100")],
+                      username: Annotated[str, Path(min_length=3, max_length=25, pattern='[a-zA-Z0-9_-]+$')],
+                      age: Annotated[int, Path(gt=18, le=100, description= "Enter your age")]):
     if not users:
         user.id = 1
     else:
