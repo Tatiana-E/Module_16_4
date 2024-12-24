@@ -19,15 +19,14 @@ async def get_users() -> list:
 
 
 @app.post('/user/{username}/{age}')
-async def create_user(user_id: Annotated[int, Path(gt=0, le=100, description= "User ID from 1 to 100")],
-                      username: Annotated[str, Path(min_length=3, max_length=25, pattern='[a-zA-Z0-9_-]+$')],
-                      age: Annotated[int, Path(gt=18, le=100, description= "Enter your age")]):
+async def create_user(username: Annotated[str, Path(min_length=3, max_length=25, pattern='[a-zA-Z0-9_-]+$')],
+                      age: Annotated[int, Path(gt=18, le=100, description= "Enter your age")]) -> str:
     if not users:
-        user.id = 1
+        user_id = 1
     else:
-        user.id = users[-1].id + 1
-    users.append(user)
-    return user
+        user_id = users[-1].id + 1
+    users.append({user_id: f"Имя: {username}, возраст: {age}"})
+    return f"User {user_id} is registered!"
 
 
 @app.put('/user/{user_id}/{username}/{age}')
